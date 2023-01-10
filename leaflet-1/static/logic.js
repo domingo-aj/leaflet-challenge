@@ -1,15 +1,16 @@
 var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 
 function colorAssign(dep) {
-    return dep > 90 ? '#4a5bfa':
-        dep > 70 ? '#a1aaf8':
-            dep > 50 ? '#afb6f9':
-                dep > 30 ? '#bcc2fa':
-                     dep > 10 ? '#d7dbfc':
-                        '#e4e7fd';    
+    return dep >= 90 ? '#4A5BfA':
+        dep > 70 ? '#A1AAf8':
+            dep > 50 ? '#AfB6F9':
+                dep > 30 ? '#BCC2FA':
+                     dep > 10 ? '#D7DBFC':
+                        '#E4E7FD';    
 };
 
 function createFeatures(earthquakeData) {
+
     function onEachFeature(feature, layer) {
         layer.bindPopup(`<h3> ${feature.properties.place} </h3><hr>
         <p>Date: ${new Date(feature.properties.time)}</p>
@@ -17,27 +18,24 @@ function createFeatures(earthquakeData) {
         <p>Depth: ${feature.geometry.coordinates[2]}`);
     };
 
-    function circleLayer(feature, latlng) {
-        var e_markers = {
+    function pointToLayer(feature, latlng) {
+        var quakeMarkers = {
             radius: feature.properties.mag * 40000,
             fillOpacity: 0.75,
-            color: 'grey',
+            color: 'white',
             fillColor: colorAssign(feature.geometry.coordinates[2]),
             weight: 1
         }
-
-        return L.circle(latlng, e_markers)
-
+        return L.circle(latlng, quakeMarkers)
     };
 
     var earthquakes = L.geoJSON(earthquakeData, {
         onEachFeature: onEachFeature,
-        pointToLayer: circleLayer
+        pointToLayer: pointToLayer
     });
 
     createMap(earthquakes);
 };
-
 
 function createMap(earthquakes) {
 
@@ -52,8 +50,8 @@ function createMap(earthquakes) {
 
     // Create a baseMaps object.
     var baseMaps = {
-        "Street Map": street,
-        "Topographic Map": topo
+        "Street": street,
+        "Topographic": topo
     };
 
     // Create an overlay object to hold our overlay.
@@ -80,7 +78,7 @@ function createMap(earthquakes) {
             depth = [-10, 10, 30, 50, 70, 90];
         for (var i = 0; i < depth.length; i++){
             div.innerHTML +=
-                '<i style="background:' + colorAssign(depth[i] + 1) + '"></i> ' +
+                '<i style="background:' + colorAssign(depth[i]) + '"></i> ' +
                 depth[i] + (depth[i + 1] ? '&ndash;' + depth[i + 1] + '<br>' : '+');
         }
         return div;
