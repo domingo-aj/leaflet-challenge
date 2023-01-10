@@ -78,7 +78,7 @@ function createMap(earthquakes) {
             depth = [-10, 10, 30, 50, 70, 90];
         for (var i = 0; i < depth.length; i++){
             div.innerHTML +=
-                '<i style="background:' + colorAssign(depth[i]) + '"></i> ' +
+                '<i style="background:' + colorAssign(depth[i] + 1) + '"></i> ' +
                 depth[i] + (depth[i + 1] ? '&ndash;' + depth[i + 1] + '<br>' : '+');
         }
         return div;
