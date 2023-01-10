@@ -24,7 +24,7 @@ function createFeatures(earthquakeData) {
             fillOpacity: 0.75,
             color: 'white',
             fillColor: colorAssign(feature.geometry.coordinates[2]),
-            weight: 1
+            weight: 0.50
         }
         return L.circle(latlng, quakeMarkers)
     };
